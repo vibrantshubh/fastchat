@@ -16,14 +16,17 @@ os.makedirs("voices", exist_ok=True)
 clients = []
 
 from fastapi import Request
+from fastapi.responses import HTMLResponse
 
 @app.get("/", response_class=HTMLResponse)
-async def get(request: Request):
+async def root(request: Request):
     user_agent = request.headers.get("user-agent", "").lower()
     if "mobile" in user_agent or "android" in user_agent or "iphone" in user_agent:
+        # redirect mobile users
         return HTMLResponse('<script>window.location.href="/mobile";</script>')
     with open("index.html", "r", encoding="utf-8") as f:
         return HTMLResponse(f.read())
+
 
 @app.get("/mobile")
 async def mobile():
