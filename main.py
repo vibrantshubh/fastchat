@@ -15,8 +15,13 @@ os.makedirs("voices", exist_ok=True)
 # Store connected clients as (WebSocket, username)
 clients = []
 
-@app.get("/")
-async def get():
+from fastapi import Request
+
+@app.get("/", response_class=HTMLResponse)
+async def get(request: Request):
+    user_agent = request.headers.get("user-agent", "").lower()
+    if "mobile" in user_agent or "android" in user_agent or "iphone" in user_agent:
+        return HTMLResponse('<script>window.location.href="/mobile";</script>')
     with open("index.html", "r", encoding="utf-8") as f:
         return HTMLResponse(f.read())
 
