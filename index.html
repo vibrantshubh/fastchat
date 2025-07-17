@@ -216,7 +216,9 @@
     username = username.trim();
     localStorage.setItem("chat_username", username);
 
-    const ws = new WebSocket(`ws://${location.host}/ws`);
+    const ws = new WebSocket(
+      (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws"
+        );
     const messagesDiv = document.getElementById("messages");
     const input = document.getElementById("messageInput");
 
